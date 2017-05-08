@@ -43,7 +43,7 @@ public class Controller {
       }
 
     }
-    public void openNewWindow(){
+    private void openNewWindow(){
 
         try {
 
