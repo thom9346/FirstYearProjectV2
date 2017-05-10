@@ -1,5 +1,6 @@
 package LogicLayer;
 
+import DataLayer.UserCredentials;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,7 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+
+import java.awt.event.KeyEvent;
 
 /**
  * Created by Thomas on 06-05-2017.
@@ -24,26 +28,54 @@ public class Controller {
     private Label wrongPW;
 
 
-    public void login() {
+    private boolean validateUser()
+    {
+        UserCredentials userCredentials = new UserCredentials();
+        String userName = usernameInput.getText();
+        String password = passwordInput.getText();
 
 
-      String userName = usernameInput.getText();
-      String password = passwordInput.getText();
+        if(userName.equals(userCredentials.getUserName()) && password.equals(userCredentials.getPassword()))
+            return true;
 
-      if(userName.equals("root") && password.equals("root")) {
-          Stage stage = (Stage) loginButton.getScene().getWindow();
-          stage.close();
+        return false;
+    }
 
-      openNewWindow();
 
-      }
-      else{
 
-          wrongPW.setText("Wrong username/password");
-      }
+    public void login()
+    {
+
+
+        if(validateUser()) {
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.close();
+
+            openNewWindow();
+
+        }
+        else{
+
+            wrongPW.setText("Wrong username/password");
+        }
 
     }
-    private void openNewWindow(){
+
+    public void loginWithEnter()
+    {
+
+        passwordInput.setOnKeyPressed(e-> {
+           if(e.getCode() == KeyCode.ENTER && validateUser()) {
+               openNewWindow();
+           }
+            wrongPW.setText("Wrong username/password");
+        });
+
+
+    }
+
+    private void openNewWindow()
+    {
 
         try {
 
@@ -60,4 +92,5 @@ public class Controller {
             System.out.println("Cant load window");
         }
     }
+
 }
